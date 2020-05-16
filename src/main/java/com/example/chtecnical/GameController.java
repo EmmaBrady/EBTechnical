@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
+import java.util.Arrays;
 
 @RestController
 public class GameController {
@@ -27,6 +28,35 @@ public class GameController {
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
+    @RequestMapping("/games")
+    public GameDTO[] JsonMapper() throws IOException {
+
+        Reader data = new FileReader(new File("src/main/resources/games.json"));
+
+        ObjectMapper mapper = new ObjectMapper();
+        GameDTO[] jsonObj = mapper.readValue(data, GameDTO[].class);
+
+        for (GameDTO itr : jsonObj) {
+            System.out.println("Val of id is: " + itr.getId());
+            System.out.println("Val of title is: " + itr.getTitle());
+            System.out.println("Val of description is: " + itr.getDescription());
+            System.out.println("Val of by is: " + itr.getBy());
+            System.out.println("Val of platform is: " + Arrays.toString(itr.getPlatform()));
+            System.out.println("Val of age rating is: " + itr.getAge_rating());
+            System.out.println("Val of likes is: " + itr.getLikes());
+            System.out.println("Val of comments is: " + itr.getComments() + "\n");
+
+        }
+         return jsonObj;
+    }
+
+    @RequestMapping(value = "/games/report", method = RequestMethod.GET)
+    public String getReport(){
+
+        return "test";
     }
 
 }
