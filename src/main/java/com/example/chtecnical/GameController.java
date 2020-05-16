@@ -56,25 +56,34 @@ public class GameController {
     }
 
     @RequestMapping(value = "/games/report", method = RequestMethod.GET)
-    public ArrayList<String> getReport() throws IOException {
+    public Map<String,String> getReport() throws IOException {
         Reader data = new FileReader(new File("src/main/resources/games.json"));
 
-        ArrayList<String> reportValues = new ArrayList<>();
+        Map<String, String> report = new HashMap<>();
         ArrayList<String> usersCommented = new ArrayList<>();
-        ArrayList<Integer> gameLikes = new ArrayList<>();
-
-        ArrayList<String> report = new ArrayList<>();
+        Map<String, Integer> gameLikes = new HashMap<>();
 
         ObjectMapper mapper = new ObjectMapper();
         Game[] jsonObj = mapper.readValue(data, Game[].class);
 
+        int sumOfLikes = 0;
+
         for (Game game : jsonObj) {
             List<Comment> gameComments = game.getComments();
+
+            int actualGameLikes = game.getLikes();
+            sumOfLikes = sumOfLikes + actualGameLikes;
 
             for (Comment comment : gameComments) {
                 String user = comment.getUser();
                 usersCommented.add(user);
+
+                int userLikes = comment.getLike();
+                sumOfLikes = sumOfLikes + userLikes;
+
             }
+            gameLikes.put(game.getTitle() + " ",sumOfLikes);
+            sumOfLikes = 0;
         }
 
         Map.Entry<String, Long> mostCommentedUser
@@ -84,9 +93,21 @@ public class GameController {
                 .stream()
                 .max(Map.Entry.comparingByValue())
                 .get();
+        String userWithMostComments = mostCommentedUser.getKey();
 
-        report.add(String.valueOf(mostCommentedUser));
+
+        Map.Entry<String, Integer> highestRatedGame = null;
+        for (Map.Entry<String, Integer> entry : gameLikes.entrySet())
+        {
+            if (highestRatedGame == null || entry.getValue().compareTo(highestRatedGame.getValue()) > 0)
+            {
+                highestRatedGame = entry;
+            }
+        }
+
+        report.put("user_with_most_comments", userWithMostComments);
+        report.put("highest_rated_game", highestRatedGame.getKey());
+
         return report;
-
     }
 }
