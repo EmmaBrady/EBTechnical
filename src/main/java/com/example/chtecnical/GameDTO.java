@@ -1,7 +1,7 @@
 package com.example.chtecnical;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class GameDTO {
 
@@ -12,8 +12,18 @@ public class GameDTO {
     private String[] platform;
     private int age_rating;
     private int likes;
-//    private ArrayList[] comments;
+    private CommentDTO comments;
 
+    public GameDTO(int id, String title, String description, String by, String[] platform, int age_rating, int likes, CommentDTO comments) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.by = by;
+        this.platform = platform;
+        this.age_rating = age_rating;
+        this.likes = likes;
+        this.comments = comments;
+    }
 
     public int getId() {
         return id;
@@ -71,13 +81,13 @@ public class GameDTO {
         this.likes = likes;
     }
 
-//    public ArrayList[] getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(ArrayList[] comments) {
-//        this.comments = comments;
-//    }
+    public CommentDTO getComments() {
+        return comments;
+    }
+
+    public void setComments(CommentDTO comments) {
+        this.comments = comments;
+    }
 
     @Override
     public String toString() {
@@ -88,8 +98,9 @@ public class GameDTO {
                 ", by='" + by + '\'' +
                 ", platform=" + Arrays.toString(platform) +
                 ", age_rating=" + age_rating +
-                ", likes=" + likes;
-//                ", comments=" + Arrays.toString(comments) +
-//                '}';
+                ", likes=" + likes +
+                ", comments=" + comments +
+                '}';
     }
+
 }
