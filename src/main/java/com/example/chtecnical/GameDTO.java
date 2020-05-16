@@ -1,9 +1,12 @@
 package com.example.chtecnical;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.Arrays;
 import java.util.List;
 
-public class GameDTO {
+@Repository
+public class GameDTO extends CommentDTO {
 
     private int id;
     private String title;
