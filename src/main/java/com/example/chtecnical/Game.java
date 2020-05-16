@@ -1,12 +1,9 @@
 package com.example.chtecnical;
 
-import org.springframework.stereotype.Repository;
-
 import java.util.Arrays;
 import java.util.List;
 
-@Repository
-public class GameDTO extends CommentDTO {
+public class Game {
 
     private int id;
     private String title;
@@ -15,7 +12,7 @@ public class GameDTO extends CommentDTO {
     private String[] platform;
     private int age_rating;
     private int likes;
-    private List<CommentDTO> comments;
+    private List<Comment> comments;
 
 
     public int getId() {
@@ -74,11 +71,11 @@ public class GameDTO extends CommentDTO {
         this.likes = likes;
     }
 
-    public List<CommentDTO> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<CommentDTO> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 

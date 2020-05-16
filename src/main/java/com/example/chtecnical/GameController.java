@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Controller
 @RestController
@@ -36,14 +34,14 @@ public class GameController {
     }
 
     @RequestMapping("/games")
-    public GameDTO[] JsonMapper() throws IOException {
+    public Game[] JsonMapper() throws IOException {
 
         Reader data = new FileReader(new File("src/main/resources/games.json"));
 
         ObjectMapper mapper = new ObjectMapper();
-        GameDTO[] jsonObj = mapper.readValue(data, GameDTO[].class);
+        Game[] jsonObj = mapper.readValue(data, Game[].class);
 
-        for (GameDTO itr : jsonObj) {
+        for (Game itr : jsonObj) {
             System.out.println("Val of id is: " + itr.getId());
             System.out.println("Val of title is: " + itr.getTitle());
             System.out.println("Val of description is: " + itr.getDescription());
@@ -58,20 +56,22 @@ public class GameController {
     }
 
     @RequestMapping(value = "/games/report", method = RequestMethod.GET)
-    public void getReport() throws IOException {
+    public ArrayList<String> getReport() throws IOException {
         Reader data = new FileReader(new File("src/main/resources/games.json"));
 
         ArrayList<String> reportValues = new ArrayList<>();
         ArrayList<String> usersCommented = new ArrayList<>();
         ArrayList<Integer> gameLikes = new ArrayList<>();
 
+        ArrayList<String> report = new ArrayList<>();
+
         ObjectMapper mapper = new ObjectMapper();
-        GameDTO[] jsonObj = mapper.readValue(data, GameDTO[].class);
+        Game[] jsonObj = mapper.readValue(data, Game[].class);
 
-        for (GameDTO game : jsonObj) {
-            List<CommentDTO> gameComments = game.getComments();
+        for (Game game : jsonObj) {
+            List<Comment> gameComments = game.getComments();
 
-            for (CommentDTO comment : gameComments) {
+            for (Comment comment : gameComments) {
                 String user = comment.getUser();
                 usersCommented.add(user);
             }
@@ -82,10 +82,11 @@ public class GameController {
                 .collect(Collectors.groupingBy(w -> w, Collectors.counting()))
                 .entrySet()
                 .stream()
-                .max(Comparator.comparing(Map.Entry::getValue))
+                .max(Map.Entry.comparingByValue())
                 .get();
 
-        System.out.println(mostCommentedUser);
+        report.add(String.valueOf(mostCommentedUser));
+        return report;
 
     }
 }
