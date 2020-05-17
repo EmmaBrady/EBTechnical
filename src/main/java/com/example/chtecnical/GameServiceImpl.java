@@ -1,10 +1,13 @@
 package com.example.chtecnical;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -111,10 +114,15 @@ public class GameServiceImpl implements GameService{
 
     @Override
     public String convertReportToJson(Map<String, String> report) {
-        Gson gson = new Gson();
-        String jsonReport = gson.toJson(report);
 
-        return jsonReport;
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonArray = null;
+        try {
+            jsonArray = mapper.writeValueAsString(report);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return jsonArray;
     }
 
     @Override
@@ -126,5 +134,16 @@ public class GameServiceImpl implements GameService{
         String prettyJson = gson.toJson(jsonElement);
 
         return prettyJson;
+    }
+
+    @Override
+    public JSONArray convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
+        JSONArray myArray = new JSONArray();
+
+        for(Map.Entry<String,String> entry : averageLikesPerGame.entrySet()) {
+            myArray.put(entry.getKey());
+            myArray.put(entry.getValue());
+        }
+        return myArray;
     }
 }

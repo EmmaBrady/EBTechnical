@@ -41,10 +41,11 @@ public class GameController {
         String highestRankedGame = gameService.findHighestRatedGame();
         String userWithMostComments = gameService.findUserWithMostComments();
         Map<String,String> averageLikesPerGame = gameService.findAverageLikesPerGame();
+        String likesToJsonArray = String.valueOf(gameService.convertLikesToJsonArray(averageLikesPerGame));
 
         report.put("highest_rated_game",highestRankedGame);
         report.put("user_with_most_comments", userWithMostComments);
-        report.putAll(averageLikesPerGame);
+        report.put("average_likes_per_game",likesToJsonArray);
 
         String jsonReport = gameService.convertReportToJson(report);
         String finalJsonReport = gameService.makeMePretty(jsonReport);

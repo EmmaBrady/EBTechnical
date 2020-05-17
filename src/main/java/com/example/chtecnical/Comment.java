@@ -1,5 +1,4 @@
 package com.example.chtecnical;
-
 import java.util.Date;
 
 public class Comment {
