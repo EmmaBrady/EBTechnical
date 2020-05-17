@@ -93,7 +93,7 @@ public class GameServiceImpl implements GameService{
                 sumOfLikes = sumOfLikes + userLikes;
 
             }
-            gameLikes.put(game.getTitle() + " ",sumOfLikes);
+            gameLikes.put(game.getTitle(), sumOfLikes);
             sumOfLikes = 0;
 
             for(Map.Entry<String,Integer> entry : gameLikes.entrySet()) {
@@ -120,8 +120,6 @@ public class GameServiceImpl implements GameService{
 
     @Override
     public List<Map<String, String>> addLabelAvgLikesPerGame(Map<String, String> averageLikesPerGame) {
-
-
         return averageLikesPerGame.entrySet().stream()
                 .map( entry ->
                         Map.ofEntries(
