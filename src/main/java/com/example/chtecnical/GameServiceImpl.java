@@ -1,6 +1,7 @@
 package com.example.chtecnical;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -75,5 +76,41 @@ public class GameServiceImpl implements GameService{
                 .get();
         String userWithMostComments = mostCommentedUser.getKey();
         return userWithMostComments;
+    }
+
+    @Override
+    public Map<String, String> findAverageLikesPerGame() throws FileNotFoundException {
+        int sumOfLikes = 0;
+        int commentsPerGame = 0;
+        Map<String,String> averageLikesPerGame = new HashMap<>();
+
+        for (Game game : jsonObj) {
+            List<Comment> gameComments = game.getComments();
+            commentsPerGame = gameComments.size();
+            int actualGameLikes = game.getLikes();
+            sumOfLikes = sumOfLikes + actualGameLikes;
+
+            for (Comment comment : gameComments) {
+                int userLikes = comment.getLike();
+                sumOfLikes = sumOfLikes + userLikes;
+
+            }
+            gameLikes.put(game.getTitle() + " ",sumOfLikes);
+            sumOfLikes = 0;
+
+            for(Map.Entry<String,Integer> entry : gameLikes.entrySet()) {
+                int avgLikesPerGame = entry.getValue() / commentsPerGame;
+                averageLikesPerGame.put(entry.getKey(), String.valueOf(avgLikesPerGame));
+            }
+        }
+        return averageLikesPerGame;
+    }
+
+    @Override
+    public String convertReportToJson(Map<String, String> report) {
+        Gson gson = new Gson();
+        String jsonReport = gson.toJson(report);
+
+        return jsonReport;
     }
 }
