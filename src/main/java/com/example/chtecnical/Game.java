@@ -81,8 +81,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return "GameDTO{" +
-                "id=" + id +
+        return "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", by='" + by + '\'' +

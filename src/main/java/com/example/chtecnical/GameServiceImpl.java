@@ -2,18 +2,12 @@ package com.example.chtecnical;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import org.json.JSONException;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,8 +48,7 @@ public class GameServiceImpl implements GameService{
             }
         }
 
-        String highestRatedGameValue = highestRatedGame.getKey();
-        return highestRatedGameValue;
+        return highestRatedGame.getKey();
     }
 
     @Override
@@ -79,8 +72,7 @@ public class GameServiceImpl implements GameService{
                 .stream()
                 .max(Map.Entry.comparingByValue())
                 .get();
-        String userWithMostComments = mostCommentedUser.getKey();
-        return userWithMostComments;
+        return mostCommentedUser.getKey();
     }
 
     @Override
@@ -126,41 +118,31 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public String makeMePretty(String json) {
+    public List<Map<String, String>> addLabelAvgLikesPerGame(Map<String, String> averageLikesPerGame) {
 
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonElement jsonElement =  new JsonParser().parse(json);
-        System.out.println(gson.toJson(jsonElement));
-        String prettyJson = gson.toJson(jsonElement);
-
-        return prettyJson;
+        return averageLikesPerGame.entrySet().stream()
+                .map( entry ->
+                        Map.ofEntries(
+                                Map.entry("title", entry.getKey()),
+                                Map.entry("average_likes", entry.getValue())
+                        )).collect(Collectors.toList());
     }
 
     @Override
-    public Map<String, String> convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
+    public String findGameBasedOffId(Integer id) {
+        for(Game game: jsonObj) {
+            if(game.getId() == id) {
+                String selectedGame = null;
+                ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+                mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                try {
+                    selectedGame = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(game);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+                return selectedGame;
+            }
+        }
         return null;
     }
-
-//    @Override
-//    public JSONArray convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
-//        JSONArray myArray = new JSONArray();
-//
-//        for(Map.Entry<String,String> entry : averageLikesPerGame.entrySet()) {
-//            myArray.put(entry.getKey());
-//            myArray.put(entry.getValue());
-//        }
-//        return myArray;
-//    }
-
-//    @Override
-//    public Map<String, String> convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
-//        Map<String,String> averageLikeGame = new HashMap<>();
-//        Map<String,String> averageLikes = new HashMap<>();
-//
-//        for(Map.Entry<String,String> entry : averageLikesPerGame.entrySet()) {
-//            averageLikeGame.put("title", entry.getKey());
-//            averageLikes.put("average_likes",entry.getValue());
-//        }
-//        return myArray;
-//    }
 }
