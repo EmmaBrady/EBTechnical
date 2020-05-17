@@ -7,7 +7,7 @@
     "PS4"
   ],
   "age_rating": "16",
-  "likes": 100,
+  "likes": 200,
   "comments": [
     {
       "user": "bob",
@@ -46,7 +46,7 @@
         "like": 12
       },
       {
-        "user": "bob",
+        "user": "Alison",
         "message": "Very fun, immersive puzzle game!",
         "dateCreated": "2014-01-03",
         "like": 24
@@ -65,16 +65,10 @@
     "likes": 68,
     "comments": [
       {
-        "user": "bob",
+        "user": "Alison",
         "message": "Too many noobs",
         "dateCreated": "2011-01-03",
         "like": 6
-      },
-      {
-        "user": "testingPriest",
-        "message": "Not enough shooting for me, far too easy ",
-        "dateCreated": "2011-04-02",
-        "like": 3
       }
     ]
   }

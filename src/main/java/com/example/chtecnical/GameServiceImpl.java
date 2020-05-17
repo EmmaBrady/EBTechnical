@@ -111,7 +111,7 @@ public class GameServiceImpl implements GameService{
             }
             avgGameLikes.put(game.getTitle(),sumOfLikes);
             sumOfLikes = 0;
-            
+
             for(Map.Entry<String,Integer> entry : avgGameLikes.entrySet()) {
                 int avgLikesPerGame = entry.getValue() / commentsPerGame;
                 averageLikesPerGame.put(entry.getKey(), String.valueOf(avgLikesPerGame));
