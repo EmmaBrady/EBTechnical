@@ -19,13 +19,13 @@ public class GameController {
     @Autowired
     GameService gameService;
 
-    @RequestMapping(value = "/games/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/games/{id}", method = RequestMethod.GET, produces="text/plain")
     public String getGameBasedOffId(@PathVariable(name = "id") Integer id) throws Exception {
 
         return gameService.findGameBasedOffId(id);
     }
 
-    @RequestMapping(value = "/games/report", method = RequestMethod.GET)
+    @RequestMapping(value = "/games/report", method = RequestMethod.GET, produces="text/plain")
     public String getReport() throws IOException {
 
         Map<String, Object> report = new HashMap<>();

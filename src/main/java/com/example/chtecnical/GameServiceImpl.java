@@ -35,7 +35,7 @@ public class GameServiceImpl implements GameService{
                 sumOfLikes = sumOfLikes + userLikes;
 
             }
-            gameLikes.put(game.getTitle() + " ",sumOfLikes);
+            gameLikes.put(game.getTitle(),sumOfLikes);
             sumOfLikes = 0;
         }
 
@@ -108,17 +108,19 @@ public class GameServiceImpl implements GameService{
     public String convertReportToJson(Map<String, Object> report) {
 
         ObjectMapper mapper = new ObjectMapper();
-        String jsonArray = null;
+        String jsonString = null;
         try {
-            jsonArray = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report);
+            jsonString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report);
+            System.out.println(report);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return jsonArray;
+        return jsonString;
     }
 
     @Override
     public List<Map<String, String>> addLabelAvgLikesPerGame(Map<String, String> averageLikesPerGame) {
+
 
         return averageLikesPerGame.entrySet().stream()
                 .map( entry ->
