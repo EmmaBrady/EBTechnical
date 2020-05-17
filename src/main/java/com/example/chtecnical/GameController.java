@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class GameController {
@@ -20,7 +21,7 @@ public class GameController {
     GameService gameService;
 
     @RequestMapping(value = "/games/{id}", method = RequestMethod.GET)
-    public ResponseEntity<JsonNode> getGameInfo(@PathVariable(name = "id") Integer id) throws Exception {
+    public ResponseEntity<JsonNode> getGameBasedOffId(@PathVariable(name = "id") Integer id) throws Exception {
         Reader data = new FileReader(new File("src/main/resources/games.json"));
         ObjectMapper mapper = new ObjectMapper();
 
@@ -36,24 +37,26 @@ public class GameController {
 
     @RequestMapping(value = "/games/report", method = RequestMethod.GET)
     public String getReport() throws IOException {
-        Map<String, String> report = new HashMap<>();
+        Map<String, Object> report = new HashMap<>();
 
         String highestRankedGame = gameService.findHighestRatedGame();
         String userWithMostComments = gameService.findUserWithMostComments();
-        Map<String,String> averageLikesPerGame = gameService.findAverageLikesPerGame();
-        String likesToJsonArray = String.valueOf(gameService.convertLikesToJsonArray(averageLikesPerGame));
+        Map<String, String> averageLikesPerGame = gameService.findAverageLikesPerGame();
+
+        List<Map<String,String>> labelledAvgLikesPerGame =
+                averageLikesPerGame.entrySet().stream()
+                        .map( entry ->
+                                Map.ofEntries(
+                                        Map.entry("title", entry.getKey()),
+                                        Map.entry("average_likes", entry.getValue())
+                                )).collect(Collectors.toList());
 
         report.put("highest_rated_game",highestRankedGame);
         report.put("user_with_most_comments", userWithMostComments);
-        report.put("average_likes_per_game",likesToJsonArray);
+        report.put("average_likes_per_game",labelledAvgLikesPerGame);
 
         String jsonReport = gameService.convertReportToJson(report);
-        String finalJsonReport = gameService.makeMePretty(jsonReport);
 
-        return finalJsonReport;
+        return jsonReport;
     }
 }
-
-//TODO: Step 1 - Get averages per game - total likes / comments
-//TODO: Step 2 - Convert report map into JSON
-//TODO: Step 3 - Profit???

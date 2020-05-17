@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.stereotype.Service;
 
@@ -88,7 +87,8 @@ public class GameServiceImpl implements GameService{
     public Map<String, String> findAverageLikesPerGame() throws FileNotFoundException {
         int sumOfLikes = 0;
         int commentsPerGame = 0;
-        Map<String,String> averageLikesPerGame = new HashMap<>();
+
+        Map<String, String> averageLikesPerGame = new HashMap<>();
 
         for (Game game : jsonObj) {
             List<Comment> gameComments = game.getComments();
@@ -113,12 +113,12 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public String convertReportToJson(Map<String, String> report) {
+    public String convertReportToJson(Map<String, Object> report) {
 
         ObjectMapper mapper = new ObjectMapper();
         String jsonArray = null;
         try {
-            jsonArray = mapper.writeValueAsString(report);
+            jsonArray = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(report);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -137,13 +137,30 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
-    public JSONArray convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
-        JSONArray myArray = new JSONArray();
-
-        for(Map.Entry<String,String> entry : averageLikesPerGame.entrySet()) {
-            myArray.put(entry.getKey());
-            myArray.put(entry.getValue());
-        }
-        return myArray;
+    public Map<String, String> convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
+        return null;
     }
+
+//    @Override
+//    public JSONArray convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
+//        JSONArray myArray = new JSONArray();
+//
+//        for(Map.Entry<String,String> entry : averageLikesPerGame.entrySet()) {
+//            myArray.put(entry.getKey());
+//            myArray.put(entry.getValue());
+//        }
+//        return myArray;
+//    }
+
+//    @Override
+//    public Map<String, String> convertLikesToJsonArray(Map<String, String> averageLikesPerGame) throws JSONException {
+//        Map<String,String> averageLikeGame = new HashMap<>();
+//        Map<String,String> averageLikes = new HashMap<>();
+//
+//        for(Map.Entry<String,String> entry : averageLikesPerGame.entrySet()) {
+//            averageLikeGame.put("title", entry.getKey());
+//            averageLikes.put("average_likes",entry.getValue());
+//        }
+//        return myArray;
+//    }
 }
