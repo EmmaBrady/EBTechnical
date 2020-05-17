@@ -47,8 +47,9 @@ public class GameController {
         report.putAll(averageLikesPerGame);
 
         String jsonReport = gameService.convertReportToJson(report);
+        String finalJsonReport = gameService.makeMePretty(jsonReport);
 
-        return jsonReport;
+        return finalJsonReport;
     }
 }
 

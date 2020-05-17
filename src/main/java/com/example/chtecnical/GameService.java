@@ -9,4 +9,5 @@ public interface GameService {
     public abstract String findUserWithMostComments() throws FileNotFoundException;
     public abstract Map<String, String> findAverageLikesPerGame() throws FileNotFoundException;
     public abstract String convertReportToJson(Map<String, String> report);
+    public abstract String makeMePretty(String json);
 }

@@ -2,6 +2,9 @@ package com.example.chtecnical;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -112,5 +115,16 @@ public class GameServiceImpl implements GameService{
         String jsonReport = gson.toJson(report);
 
         return jsonReport;
+    }
+
+    @Override
+    public String makeMePretty(String json) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        JsonElement jsonElement =  new JsonParser().parse(json);
+        System.out.println(gson.toJson(jsonElement));
+        String prettyJson = gson.toJson(jsonElement);
+
+        return prettyJson;
     }
 }
