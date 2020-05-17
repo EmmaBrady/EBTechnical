@@ -18,5 +18,3 @@ public class ChtechnicalApplication
 It was fine to add our own ID's and extra data (such as additional games) to the games.json
 
 Please feel free to contact me if you have any problems or questions
-
-If you're reading this I gave you permissions correctly!
